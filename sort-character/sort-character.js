@@ -12,7 +12,7 @@ const sortCharacters = () => {
   let sortedConsonants = "";
   let words = "";
 
-  rl.question("Input one line of words (S) : ", (input) => {
+  rl.question(" * Input one line of words (S) : ", (input) => {
     words = input.toLocaleLowerCase();
     procSeparator(words);
   });
@@ -25,7 +25,7 @@ const sortCharacters = () => {
         consonants += word[i];
       }
     }
-    rl.close();
+    result();
   };
 
   const sortByAppearanceVowel = () => {
@@ -52,16 +52,33 @@ const sortCharacters = () => {
     }
   };
 
-  rl.on("close", () => {
+  const sortByAppearance = () => {
     sortByAppearanceVowel();
     sortByAppearanceConsonant();
+  };
 
-    console.log("Vowel Characters : ");
-    console.log(sortedVowels);
-    console.log("Consonant Characters : ");
-    console.log(sortedConsonants);
-    process.exit(0);
-  });
+  const restartConfirmation = () => {
+    rl.question(" * Do you want to restart? (yes/no) : ", (answer) => {
+      if (answer === "yes") {
+        sortCharacters();
+      } else if (answer === "no") {
+        console.log("Thank you!");
+        rl.close();
+      } else {
+        console.log("Invalid input!");
+        restartConfirmation();
+      }
+    });
+  };
+
+  const result = () => {
+    sortByAppearance();
+    console.log(" * Vowel Characters : ");
+    console.log(` --> ${sortedVowels}`);
+    console.log(" * Consonant Characters : ");
+    console.log(` --> ${sortedConsonants}`);
+    restartConfirmation();
+  };
 };
 
 sortCharacters();
